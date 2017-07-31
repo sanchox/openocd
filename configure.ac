@@ -367,6 +367,10 @@ AC_ARG_ENABLE([remote-bitbang],
   AS_HELP_STRING([--enable-remote-bitbang], [Enable building support for the Remote Bitbang jtag driver]),
   [build_remote_bitbang=$enableval], [build_remote_bitbang=no])
 
+AC_ARG_ENABLE([bbg-swd],
+  AS_HELP_STRING([--enable-bbg-swd], [Enable building support for BBG-SWD.]),
+  [build_bbg_swd=$enableval], [build_bbg_swd=no])
+
 AC_MSG_CHECKING([whether to enable dummy minidriver])
 AS_IF([test "x$build_minidriver_dummy" = "xyes"], [
   AS_IF([test "x$build_minidriver" = "xyes"], [
@@ -591,6 +595,16 @@ AS_IF([test "x$build_sysfsgpio" = "xyes"], [
   AC_DEFINE([BUILD_SYSFSGPIO], [0], [0 if you don't want SysfsGPIO driver.])
 ])
 
+
+AS_IF([test "x$build_bbg_swd" = "xyes"], [
+  build_bbg_swd=yes
+  LIBS="$LIBS -lprussdrv"
+  AC_DEFINE([BUILD_BBG_SWD], [1], [1 if you want the BBG-SWD driver.])
+], [
+  AC_DEFINE([BUILD_BBG_SWD], [0], [0 if you don't want the BBG-SWD driver.])
+])
+
+
 AS_IF([test "x$build_target64" = "xyes"], [
   AC_DEFINE([BUILD_TARGET64], [1], [1 if you want 64-bit addresses.])
 ], [
@@ -724,6 +738,9 @@ AM_CONDITIONAL([MINIDRIVER_DUMMY], [test "x$build_minidriver_dummy" = "xyes"])
 
 AM_CONDITIONAL([INTERNAL_JIMTCL], [test "x$use_internal_jimtcl" = "xyes"])
 AM_CONDITIONAL([INTERNAL_LIBJAYLINK], [test "x$use_internal_libjaylink" = "xyes"])
+
+AM_CONDITIONAL([BBG_SWD], [test $build_bbg_swd = yes])
+
 
 # Look for environ alternatives.  Possibility #1: is environ in unistd.h or stdlib.h?
 AC_MSG_CHECKING([for environ in unistd.h and stdlib.h])

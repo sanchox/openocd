@@ -129,6 +129,9 @@ extern struct jtag_interface kitprog_interface;
 #if BUILD_IMX_GPIO == 1
 extern struct jtag_interface imx_gpio_interface;
 #endif
+#if BUILD_BBG_SWD == 1
+extern struct jtag_interface bbg_swd_interface;
+#endif
 #endif /* standard drivers */
 
 /**
@@ -227,6 +230,9 @@ struct jtag_interface *jtag_interfaces[] = {
 #endif
 #if BUILD_IMX_GPIO == 1
 		&imx_gpio_interface,
+#endif
+#if BUILD_BBG_SWD == 1
+		&bbg_swd_interface,
 #endif
 #endif /* standard drivers */
 		NULL,
